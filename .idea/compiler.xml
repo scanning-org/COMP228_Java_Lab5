@@ -13,4 +13,9 @@
       <module name="AdrianoMelquiades_BrunoMorgado_COMP228Lab5" target="16" />
     </bytecodeTargetLevel>
   </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="AdrianoMelquiades_BrunoMorgado_COMP228Lab5" options="--add-exports java.sql.rowset/com.sun.rowset=com.example.adrianomelquiades_brunomorgado_comp228lab5" />
+    </option>
+  </component>
 </project>

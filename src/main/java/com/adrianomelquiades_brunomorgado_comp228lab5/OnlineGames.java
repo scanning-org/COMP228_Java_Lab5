@@ -4,15 +4,17 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
 public class OnlineGames extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(OnlineGames.class.getResource("games-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(OnlineGames.class.getResource("Login-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("Hello!");
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setTitle("");
         stage.setScene(scene);
         stage.show();
     }
