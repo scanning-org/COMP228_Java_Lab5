@@ -15,9 +15,10 @@ public class Player {
     private long phoneNumber;
 
 
-    //Constructor
-
+    //Default Constructor
     public Player(){}
+
+    //Constructor
     public Player(int id, String first_name, String last_name, String address, String postalCode,
                   String province, long phoneNumber) {
         this.id = id;

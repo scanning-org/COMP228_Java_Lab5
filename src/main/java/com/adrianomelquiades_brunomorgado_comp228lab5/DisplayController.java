@@ -1,10 +1,14 @@
 package com.adrianomelquiades_brunomorgado_comp228lab5;
 
+import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -41,7 +45,11 @@ public class DisplayController implements Initializable {
     @FXML
     private Label gameMessageLabel;
     @FXML
+    private Button listGamesButtonOnAction;
+    @FXML
     private TableView gamesTableView;
+    @FXML
+    private TableView gamesTitlesTableView;
     @FXML
     private TableColumn gameIDTableColumn;
     @FXML
@@ -50,6 +58,9 @@ public class DisplayController implements Initializable {
     private TableColumn playingDateTableColumn;
     @FXML
     private TableColumn scoreTableColumn;
+
+    public Game game = null;
+    public PlayerAndGame pAndGame = null;
 
 
     @Override
@@ -60,6 +71,7 @@ public class DisplayController implements Initializable {
 
         String playerName = LoginController.getPlayerFirstName();
 
+        //Display Logged in Player's name on the screen
         if(!playerName.equals("") && !playerName.equals(null)){
             welcomeUserLabel.setText("Welcome, " + playerName);
             System.out.println("login: " + playerName);
@@ -72,6 +84,7 @@ public class DisplayController implements Initializable {
 
     }
 
+    //Initialize the Edit player View and close the display View
     public void editPlayerButtonOnAction(ActionEvent event){
         createEditPlayer();
 
@@ -79,12 +92,20 @@ public class DisplayController implements Initializable {
         stage.close();
     }
 
+    //Call methods to insert Game and PlayerAndGame in their respective tables
     public void insertGameButtonOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
 
         insertNewGame();
         insertNewPLayerAndGame();
+
     }
 
+    //List all games registered for the current Player
+    public void listGamesButtonOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
+        onDisplayPlayerInformation();
+    }
+
+    //Display Edit Player View
     public static void createEditPlayer(){
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(OnlineGames.class.getResource("edit-player-view.fxml"));
@@ -100,6 +121,7 @@ public class DisplayController implements Initializable {
         }
     }
 
+    //Insert data into Game Table
     public void insertNewGame() throws SQLException, ClassNotFoundException {
 
 
@@ -109,7 +131,6 @@ public class DisplayController implements Initializable {
         try {
 
             DBUtil.insertDataIntoGame(gameID, gameTitle);
-//            gameMessageLabel.setText("New Gave has been inserted successfully!");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,6 +139,7 @@ public class DisplayController implements Initializable {
 
     }
 
+    //Insert data into PlayerAndGame Table
     public void insertNewPLayerAndGame() throws SQLException, ClassNotFoundException {
 
 
@@ -138,34 +160,61 @@ public class DisplayController implements Initializable {
 
     }
 
+
+    //Display Game and PlayerAndGame information in the TableView
+    public void onDisplayPlayerInformation() throws SQLException, ClassNotFoundException {
+
+        gamesTitlesTableView.getItems().clear();
+
+        ResultSet rsGame = DBUtil.dbExecuteQuery("SELECT g.g_id, g.game_title FROM\n" +
+                "game g, player p, player_and_game pag\n" +
+                "WHERE p.player_id = " + LoginController.player.getId() + "\n" +
+                "AND p.player_id = pag.player_id \n" +
+                "AND pag.game_id = g.g_id");
+
+        ObservableList<Game> games  = FXCollections.observableArrayList();
+
+        while(rsGame.next()) {
+
+            Game game = DBUtil.createGameFromResultSet(rsGame);
+
+            games.add(game);
+        }
+        gameTitleTableColumn.setCellValueFactory(new PropertyValueFactory<Game, String>("game_title"));
+
+        gamesTitlesTableView.setItems(games);
+
+        //clear things before populating new records
+        gamesTableView.getItems().clear();
+
+        ResultSet rs = DBUtil.dbExecuteQuery("SELECT * FROM player_and_game WHERE player_id = '" + LoginController.player.getId() + "'");
+
+
+        ObservableList<PlayerAndGame> playersAndGames  = FXCollections.observableArrayList();
+
+        while(rs.next()) {
+
+            PlayerAndGame pAndGame = DBUtil.createPlayerAndGameFromResultSet(rs);
+
+            playersAndGames.add(pAndGame);
+        }
+        gameIDTableColumn.setCellValueFactory(new PropertyValueFactory<PlayerAndGame, Integer>("game_id"));
+        playingDateTableColumn.setCellValueFactory(new PropertyValueFactory<PlayerAndGame, String>("playing_date"));
+        scoreTableColumn.setCellValueFactory(new PropertyValueFactory<PlayerAndGame, Integer>("score"));
+
+        gamesTableView.setItems(playersAndGames);
+
+
+    }
+
+    //Exit the Display Games View
     public void exitButtonOnAction(ActionEvent event){
 
         Stage stage = (Stage) exitButtonOnAction.getScene().getWindow();
         stage.close();
 
-        try{
-            FXMLLoader fxmlLoader = new FXMLLoader(OnlineGames.class.getResource("login-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-            stage = new Stage();
-            stage.initStyle(StageStyle.UNDECORATED);
-            stage.setTitle("");
-            stage.setScene(scene);
-            stage.show();
-        }catch(Exception e){
-            e.printStackTrace();
-            e.getCause();
-        }
 
     }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -173,170 +222,4 @@ public class DisplayController implements Initializable {
 
 
 
-
-    //Global variables
-//    Connection conn = null;
-//    Statement statement = null;
-//
-//    @Override
-//    public void initialize(URL url, ResourceBundle resourceBundle){
-//
-//        //Initialize connection to the database
-//        try {
-//            connectToDatabase();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        //Create Game table if it does not exist
-//        try {
-//            createTableGame();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        //Create Player Table if it does not exist
-//        try {
-//            createTablePlayer();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        //Create PlayerAndGame Table if it does not exist
-//        try {
-//            createTablePlayerAndGame();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//    }
-
-    //Establish a connection to the database
-//    public void connectToDatabase() throws SQLException{
-//
-//        String dbURL = "jdbc:oracle:thin:@199.212.26.208:1521:SQLD";
-//        String username = "COMP214M21_001_P_4";
-//        String password = "password";
-//
-//
-//        //Connect to database
-//        try{
-//            conn = DriverManager.getConnection(dbURL, username, password);
-//            System.out.println("Database is connected");
-//        }catch(SQLException e){
-//            System.out.println("Database is NOT connected");
-//            System.out.println(e.getMessage());
-//        }
-//
-//    }
-//
-//    public boolean tableExist(Connection conn, String tableName) throws SQLException{
-//        boolean tExists = false;
-//
-//        try{
-//            ResultSet rs = conn.getMetaData().getTables(null, null, tableName, null);
-//            while(rs.next()){
-//                String tName = rs.getString("TABLE_NAME");
-//                if(tName != null && tName.equals(tableName)){
-//                    tExists = true;
-//                    break;
-//                }
-//            }
-//        }catch(SQLException e){
-//            System.out.println(e.getMessage());
-//        }
-//
-//        return tExists;
-//    }
-
-    //Create table
-
-//    public void createTableGame() throws SQLException {
-//       boolean tExists = false;
-//       try{
-//          tExists = tableExist(conn, "GAME");
-//       }catch(SQLException e){
-//           System.out.println(e.getMessage());
-//       }
-//
-//       if(tExists){
-//           System.out.println("Table already created");
-//       }
-//       else{
-//           //Create table and set the Primary Key
-//           String sql = "CREATE TABLE game(g_id integer, game_title VARCHAR(50), CONSTRAINT game_gID_pk PRIMARY KEY (g_id))";
-//           statement = conn.createStatement();
-//           statement.execute(sql);
-//           System.out.println("Table Game created");
-//
-//           //Add constraints
-//           String constraint = "ALTER TABLE game MODIFY game_title CONSTRAINT game_gametitle_nn NOT NULL";
-//           statement = conn.createStatement();
-//           statement.execute(constraint);
-//
-//       }
-//
-//    }
-//
-//    public void createTablePlayer() throws SQLException {
-//        boolean tExists = false;
-//        try{
-//            tExists = tableExist(conn, "PLAYER");
-//        }catch(SQLException e){
-//            System.out.println(e.getMessage());
-//        }
-//
-//        if(tExists){
-//            System.out.println("Table already created");
-//        }
-//        else{
-//            String sql = "CREATE TABLE player(player_id integer, first_name VARCHAR(50), last_name VARCHAR(50)," +
-//                    "address VARCHAR(100), postal_code VARCHAR(7), province VARCHAR(2), phone_number NUMBER(10), password VARCHAR(40)" +
-//                    " CONSTRAINT player_playerID_pk PRIMARY KEY (player_id))";
-//            statement = conn.createStatement();
-//            statement.execute(sql);
-//            System.out.println("Table Player created");
-//
-//            //Add constraints
-//            String constraint = "ALTER TABLE player MODIFY (first_name CONSTRAINT player_firstname_nn NOT NULL," +
-//                    "last_name CONSTRAINT player_lastname_nn NOT NULL, phone_number CONSTRAINT player_phonenumber_nn NOT NULL," +
-//                    "CONSTRAINT player_uk UNIQUE(password)";
-//            statement = conn.createStatement();
-//            statement.execute(constraint);
-//        }
-//
-//    }
-//
-//    public void createTablePlayerAndGame() throws SQLException {
-//        boolean tExists = false;
-//        try{
-//            tExists = tableExist(conn, "PLAYER_AND_GAME");
-//        }catch(SQLException e){
-//            System.out.println(e.getMessage());
-//        }
-//
-//        if(tExists){
-//            System.out.println("Table already created");
-//        }
-//        else{
-//            String sql = "CREATE TABLE player_and_game(player_game_id INTEGER, game_id INTEGER, player_id INTEGER," +
-//                    "playing_date DATE, score INTEGER DEFAULT 0)";
-//            statement = conn.createStatement();
-//            statement.execute(sql);
-//            System.out.println("Table PlayerAndGame created");
-//
-//            //Add Composite primary key
-//            String constraint = "ALTER TABLE player_and_game ADD CONSTRAINT gameID#_playerID#_pk" +
-//                    " PRIMARY KEY (game_id, player_id)";
-//            statement = conn.createStatement();
-//            statement.execute(constraint);
-//
-//            //Add other constraints
-//            String constraints = "ALTER TABLE player_and_game MODIFY (game_id CONSTRAINT gameID_nn NOT NULL," +
-//                    "player_id CONSTRAINT playerID_nn NOT NULL, playing_date CONSTRAINT playingDate_nn NOT NULL)";
-//            statement = conn.createStatement();
-//            statement.execute(constraints);
-//        }
-//
-//    }
 

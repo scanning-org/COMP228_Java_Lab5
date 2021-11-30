@@ -42,18 +42,18 @@ public class LoginController implements Initializable {
     @FXML
     private Button registrationButtonOnAction;
 
-
+    //Global Variables
     public static Player player = null;
     public CachedRowSetImpl crs = null;
 
 
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle){
+    public void initialize(URL url, ResourceBundle resourceBundle) {
         File brandingFile = new File("Images/Centennial_College.jpg");
         Image brandingImage = new Image(brandingFile.toURI().toString());
         brandingImageView.setImage(brandingImage);
 
-
+        //Create Tables if not existent during program's initialization
         try {
             DBUtil.createTablePlayer();
         } catch (SQLException e) {
@@ -75,10 +75,11 @@ public class LoginController implements Initializable {
 
     }
 
+    //Initialize login validation
     public void loginButtonOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
 
         if (firstNameTextField.getText().isBlank() == false && lastNameTextField.getText().isBlank() == false
-        && playerIDTextField.getText().isBlank()==false) {
+                && playerIDTextField.getText().isBlank() == false) {
 
             validateLogin();
 
@@ -88,10 +89,8 @@ public class LoginController implements Initializable {
         }
     }
 
-    public void registerButtonOnAction(ActionEvent event){
-        createPlayerForm();
-    }
 
+    //Create Player object and validate Login
     public void validateLogin() throws SQLException, ClassNotFoundException {
 
         String verifyLogin = "SELECT * FROM player WHERE first_name ='" + firstNameTextField.getText() + "' AND last_name ='" + lastNameTextField.getText() + "'"
@@ -104,15 +103,15 @@ public class LoginController implements Initializable {
 
             player = DBUtil.getPlayerFromResultSet(rsPlayer);
 
-            if(player != null){
-                if(firstNameTextField.getText().equals(player.getFirst_name())
-                        && lastNameTextField.getText().equals(player.getLast_name())){
+            if (player != null) {
+                if (firstNameTextField.getText().equals(player.getFirst_name())
+                        && lastNameTextField.getText().equals(player.getLast_name())) {
 
                     createDisplayGames();
                     System.out.println(player.toString());
 
                 }
-            }else{
+            } else {
                 loginMessageLabel.setText("Player not found. Please Register.");
             }
 
@@ -132,29 +131,33 @@ public class LoginController implements Initializable {
 
     }
 
-    public static String getPlayerFirstName(){
+    //Get player's first name to display on Games View
+    public static String getPlayerFirstName() {
 
-        if(player == null){
+        if (player == null) {
             return "";
-        }else{
+        } else {
             return player.getFirst_name();
         }
 
     }
 
-    public void registrationButtonOnAction(ActionEvent event){
+    //Initialize Registration form
+    public void registrationButtonOnAction(ActionEvent event) {
 
         createPlayerForm();
 
     }
 
-    public void cancelButtonOnAction(ActionEvent event){
+    //Cancel registration and close view
+    public void cancelButtonOnAction(ActionEvent event) {
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
     }
 
-    public void createPlayerForm(){
-        try{
+    //Build and display Registration form
+    public void createPlayerForm() {
+        try {
             FXMLLoader fxmlLoader = new FXMLLoader(OnlineGames.class.getResource("register.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             Stage stage = new Stage();
@@ -162,14 +165,15 @@ public class LoginController implements Initializable {
             stage.setTitle("");
             stage.setScene(scene);
             stage.show();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             e.getCause();
         }
     }
 
-    public static void createDisplayGames(){
-        try{
+    //Build and Display Games View
+    public static void createDisplayGames() {
+        try {
             FXMLLoader fxmlLoader = new FXMLLoader(OnlineGames.class.getResource("games-view.fxml"));
             Scene scene = new Scene(fxmlLoader.load());
             Stage stage = new Stage();
@@ -177,14 +181,10 @@ public class LoginController implements Initializable {
             stage.setTitle("");
             stage.setScene(scene);
             stage.show();
-        }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             e.getCause();
         }
     }
-
-
-
-
 
 }

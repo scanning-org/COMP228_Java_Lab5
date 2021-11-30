@@ -29,7 +29,11 @@ import java.util.ResourceBundle;
         @FXML
         private Button closeButton;
         @FXML
+        private Button registerButton;
+        @FXML
         private Label registrationMessageLabel;
+        @FXML
+        private Label failedRegistrationMessageLabel;
         @FXML
         private TextField firstNameTextField;
         @FXML
@@ -49,6 +53,7 @@ import java.util.ResourceBundle;
         //Global variables
         public static String playerFirstName = "";
 
+        @Override
         public void initialize(URL url, ResourceBundle resourceBundle) {
             File centennialFile = new File("Images/centennial.jpg");
             Image centennialImage = new Image(centennialFile.toURI().toString());
@@ -56,6 +61,7 @@ import java.util.ResourceBundle;
 
         }
 
+        //Set action event to the register Button
         public void registerButtonOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
             if (idTextField.getText() != null && firstNameTextField.getText() != null && lastNameTextField.getText() != null
                     && addressTextField.getText() != null && postalCodeTextField.getText() != null
@@ -63,21 +69,24 @@ import java.util.ResourceBundle;
 
                 registerUser();
 
+
             } else {
                 registrationMessageLabel.setText("Please fill in all values.");
             }
 
         }
 
+        //Cancel action and close view
         public void closeButtonOnAction(ActionEvent event) {
             Stage stage = (Stage) closeButton.getScene().getWindow();
             stage.close();
-            Platform.exit();
+//            Platform.exit();
         }
 
+        //Method to Register Users
         public void registerUser() throws SQLException, ClassNotFoundException {
 
-
+            //Select all TextFields values
             int id = Integer.parseInt(idTextField.getText());
             String firstName = firstNameTextField.getText();
             String lastName = lastNameTextField.getText();
@@ -88,20 +97,38 @@ import java.util.ResourceBundle;
 
             playerFirstName = firstName;
 
+            //Verify if ID already exists in the Database. In case of negative response, register user.
             try {
 
-                DBUtil.insertDataIntoPlayer(id, firstName, lastName, address, postalCode, province, phone);
-                registrationMessageLabel.setText("User has been registered successfully!");
+                String verifyLogin = "SELECT * FROM player WHERE player_id ='" + Integer.parseInt(idTextField.getText()) + "'";
+                //Get ResultSet from dbExecuteQuery method
+                ResultSet rsPlayer = DBUtil.dbExecuteQuery(verifyLogin);
+
+                LoginController.player = DBUtil.getPlayerFromResultSet(rsPlayer);
+
+                if(LoginController.player == null){
+                    DBUtil.insertDataIntoPlayer(id, firstName, lastName, address, postalCode, province, phone);
+                    registrationMessageLabel.setText("User has been registered successfully!");
+
+                    Stage stage = (Stage) registerButton.getScene().getWindow();
+                    stage.close();
+
+                }else{
+                    failedRegistrationMessageLabel.setText("Player ID #" + LoginController.player.getId() + " Already exists.");
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
                 e.getCause();
             }
-            String verifyLogin = "SELECT * FROM player WHERE first_name ='" + firstNameTextField.getText() + "' AND last_name ='" + lastNameTextField.getText() + "'"
-                    + " AND player_id ='" + Integer.parseInt(idTextField.getText()) + "'";
 
-            //Execute SELECT statement
+
             try {
+
+                //Execute SELECT statement to confirm that the new user has been created. In case positive, perform login
+                String verifyLogin = "SELECT * FROM player WHERE first_name ='" + firstNameTextField.getText() + "' AND last_name ='" + lastNameTextField.getText() + "'"
+                        + " AND player_id ='" + Integer.parseInt(idTextField.getText()) + "'";
+
                 //Get ResultSet from dbExecuteQuery method
                 ResultSet rsPlayer = DBUtil.dbExecuteQuery(verifyLogin);
 
@@ -117,7 +144,7 @@ import java.util.ResourceBundle;
 
                     }
                 } else {
-                    registrationMessageLabel.setText("Player not found. Please Register.");
+                    registrationMessageLabel.setText("Please try again.");
                 }
 
             } catch (Exception e) {

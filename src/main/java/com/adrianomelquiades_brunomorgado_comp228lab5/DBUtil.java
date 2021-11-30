@@ -67,7 +67,6 @@ public class DBUtil {
     }
 
     //Create table
-
     public static void createTableGame() throws SQLException {
         //Open database connection
         connectToDatabase();
@@ -80,7 +79,7 @@ public class DBUtil {
         }
 
         if(tExists){
-            System.out.println("Table already created");
+            System.out.println("Table Game Already Created");
         }
         else{
             //Create table and set the Primary Key
@@ -117,7 +116,7 @@ public class DBUtil {
         }
 
         if(tExists){
-            System.out.println("Table already created");
+            System.out.println("Table PLayer Already Created");
         }
         else{
             String sql = "CREATE TABLE player(player_id integer, first_name VARCHAR(50), last_name VARCHAR(50)," +
@@ -155,20 +154,15 @@ public class DBUtil {
         }
 
         if(tExists){
-            System.out.println("Table already created");
+            System.out.println("Table PLayer_And_Game Already Created");
         }
         else{
             String sql = "CREATE TABLE player_and_game(player_game_id integer GENERATED ALWAYS AS(player_id || '' || game_id), game_id integer, player_id integer," +
                     "playing_date DATE, score INTEGER DEFAULT 0, CONSTRAINT player_game_ID_pk PRIMARY KEY (player_game_id))";
             statement = conn.createStatement();
             statement.execute(sql);
-            System.out.println("Table PlayerAndGame created");
+            System.out.println("Table Player_And_Game created");
 
-//            //Add Composite primary key
-//            String constraint = "ALTER TABLE player_and_game ADD CONSTRAINT gameID#_playerID#_pk" +
-//                    " PRIMARY KEY (game_id, player_id)";
-//            statement = conn.createStatement();
-//            statement.execute(constraint);
 
             //Add other constraints
             String constraints = "ALTER TABLE player_and_game MODIFY (game_id CONSTRAINT gameID_nn NOT NULL," +
@@ -186,6 +180,7 @@ public class DBUtil {
 
     }
 
+    //Insert values into player
     public static void insertDataIntoPlayer(int id, String fName, String lName, String address, String postalCode,
                                             String province, long phoneNumber) throws SQLException {
         //Open connection
@@ -211,6 +206,7 @@ public class DBUtil {
         dbDisconnect();
     }
 
+    //Update player's data
     public static void updateDataIntoPlayer(int newID, String fName, String lName, String address, String postalCode,
                                             String province, long phoneNumber, int id) throws SQLException {
         //Open connection
@@ -291,7 +287,7 @@ public class DBUtil {
         try {
             //Connect to DB (Establish Oracle Connection)
             connectToDatabase();
-            System.out.println("Select statement: " + queryStmt + "\n");
+//            System.out.println("Select statement: " + queryStmt + "\n");
 
             //Create statement
             stmt = conn.createStatement();
@@ -323,7 +319,7 @@ public class DBUtil {
         return crs;
     }
 
-    //Use ResultSet from DB as parameter and print to the console a player's attributes.
+    //Use ResultSet from DB as parameter and return a player object.
     public static Player getPlayerFromResultSet(ResultSet rs) throws SQLException
     {
         Player player = null;
@@ -343,7 +339,32 @@ public class DBUtil {
         return player;
     }
 
+    //Use ResultSet from DB as parameter and return a game object
+    public static Game createGameFromResultSet(ResultSet rs) throws SQLException
+    {
 
+            Game game = new Game();
+            game.setGame_id(rs.getInt("G_ID"));
+            game.setGame_title(rs.getString("GAME_TITLE"));
+
+
+        return game;
+    }
+
+    //Use ResultSet from DB as parameter and return a PLayerAndGame object.
+    public static PlayerAndGame createPlayerAndGameFromResultSet(ResultSet rs) throws SQLException
+    {
+
+            PlayerAndGame pAndGame = new PlayerAndGame();
+            pAndGame.setPlayer_game_id(rs.getInt("PLAYER_GAME_ID"));
+            pAndGame.setGame_id(rs.getInt("GAME_ID"));
+            pAndGame.setPlayer_id(rs.getInt("PLAYER_ID"));
+            pAndGame.setPlaying_date(rs.getString("PLAYING_DATE"));
+            pAndGame.setScore(rs.getInt("SCORE"));
+
+
+        return pAndGame;
+    }
 
 
 }

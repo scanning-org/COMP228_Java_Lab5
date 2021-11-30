@@ -9,8 +9,7 @@ public class PlayerAndGame {
     private int score;
 
 
-    //Constructor
-
+    //Constructors
     public PlayerAndGame(){}
     public PlayerAndGame(int player_game_id, int game_id, int player_id, String playing_date, int score) {
         this.player_game_id = player_game_id;

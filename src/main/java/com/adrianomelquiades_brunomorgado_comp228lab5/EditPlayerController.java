@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 public class EditPlayerController implements Initializable{
 
     @FXML
-    private TextField idTextField;
+    private Label idLabel;
     @FXML
     private TextField firstNameTextField;
     @FXML
@@ -46,40 +46,35 @@ public class EditPlayerController implements Initializable{
     @FXML
     private Button cancelButtonOnAction;
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         populatePlayerFields();
+
     }
 
+    //Populate fields with data from the Logged in Player
     public void populatePlayerFields(){
 
-//        if(LoginController.player != null){
-            idTextField.setText(Integer.toString(LoginController.player.getId()));
+            idLabel.setText(Integer.toString(LoginController.player.getId()));
             firstNameTextField.setText(LoginController.player.getFirst_name());
             lastNameTextField.setText(LoginController.player.getLast_name());
             addressTextField.setText(LoginController.player.getAddress());
             postalCodeTextField.setText(LoginController.player.getPostalCode());
             provinceTextField.setText(LoginController.player.getProvince());
             phoneTextField.setText(Long.toString(LoginController.player.getPhoneNumber()));
-//        }else{
-//            idTextField.setText(Integer.toString(LoginController.player.getId()));
-//            firstNameTextField.setText(LoginController.player.getFirst_name());
-//            lastNameTextField.setText(LoginController.player.getLast_name());
-//            addressTextField.setText(LoginController.player.getAddress());
-//            postalCodeTextField.setText(LoginController.player.getPostalCode());
-//            provinceTextField.setText(LoginController.player.getProvince());
-//            phoneTextField.setText(Long.toString(LoginController.player.getPhoneNumber()));
-//        }
 
     }
 
+    //Confirm changes to user
     public void confirmButtonOnAction(ActionEvent event) throws SQLException, ClassNotFoundException {
-        if (idTextField.getText() != null && firstNameTextField.getText() != null && lastNameTextField.getText() != null
+        //Verify if all fields are completed
+        if (idLabel.getText() != null && firstNameTextField.getText() != null && lastNameTextField.getText() != null
                 && addressTextField.getText() != null && postalCodeTextField.getText() != null
                 && provinceTextField.getText() != null && phoneTextField.getText() != null) {
 
-            updateUser();
+            updatePlayer();
 
             Stage stage = (Stage) confirmButtonOnAction.getScene().getWindow();
             stage.close();
@@ -92,6 +87,7 @@ public class EditPlayerController implements Initializable{
 
     }
 
+    //Cancel the Edit action
     public void cancelButtonOnAction(ActionEvent event) {
 
         Stage stage = (Stage) cancelButtonOnAction.getScene().getWindow();
@@ -101,10 +97,10 @@ public class EditPlayerController implements Initializable{
 
     }
 
-    public void updateUser() throws SQLException, ClassNotFoundException {
+    public void updatePlayer() throws SQLException, ClassNotFoundException {
 
-
-        int newID = Integer.parseInt(idTextField.getText());
+        //Get Values from label and TextFields
+        int newID = Integer.parseInt(idLabel.getText());
         int id = LoginController.player.getId();
         String firstName = firstNameTextField.getText();
         String lastName = lastNameTextField.getText();
@@ -115,16 +111,51 @@ public class EditPlayerController implements Initializable{
 
 
         try {
-
+            //Update Player's data into the table
             DBUtil.updateDataIntoPlayer(newID, firstName, lastName, address, postalCode, province, phone, id);
             messageLabel.setText("User has been updated!");
-//                LoginController.createDisplayGames();
+
+            //Update the Logged in Player's data
+            updateLoginPlayerData();
+
 
         } catch (Exception e) {
             e.printStackTrace();
             e.getCause();
 
         }
+
+    }
+
+    //Update the Logged in Player
+    public void updateLoginPlayerData() throws SQLException, ClassNotFoundException {
+
+        Player newPlayer = null;
+
+        String getPlayer = "SELECT * FROM player WHERE player_id ='" + Integer.parseInt(idLabel.getText()) + "'";
+
+        //Execute SELECT statement
+        try {
+            //Get ResultSet from dbExecuteQuery method
+            ResultSet rsPlayer = DBUtil.dbExecuteQuery(getPlayer);
+
+            newPlayer = DBUtil.getPlayerFromResultSet(rsPlayer);
+
+            LoginController.player = newPlayer;
+
+
+        } catch (SQLException | ClassNotFoundException e) {
+            System.out.println("While searching a player an error occurred: " + e);
+            //Return exception
+            throw e;
+        }
+
+        if (DBUtil.statement != null) {
+            //close statement
+            DBUtil.statement.close();
+            System.out.println("Statement closed");
+        }
+
 
     }
 

@@ -6,32 +6,37 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="439.0" prefWidth="471.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.adrianomelquiades_brunomorgado_comp228lab5.EditPlayerController">
+<AnchorPane prefHeight="528.0" prefWidth="552.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.adrianomelquiades_brunomorgado_comp228lab5.EditPlayerController">
    <children>
-      <Label layoutX="14.0" layoutY="31.0" text="ID:" />
-      <TextField fx:id="idTextField" layoutX="90.0" layoutY="27.0" prefHeight="25.0" prefWidth="339.0" />
-      <Label layoutX="14.0" layoutY="66.0" text="First Name:" />
-      <TextField fx:id="firstNameTextField" layoutX="90.0" layoutY="62.0" prefHeight="25.0" prefWidth="339.0" />
-      <Label layoutX="14.0" layoutY="105.0" text="Last Name:" />
-      <TextField fx:id="lastNameTextField" layoutX="90.0" layoutY="101.0" prefHeight="25.0" prefWidth="339.0" />
-      <Label layoutX="14.0" layoutY="143.0" text="Address:" />
-      <TextField fx:id="addressTextField" layoutX="90.0" layoutY="139.0" prefHeight="25.0" prefWidth="339.0" />
-      <Label layoutX="14.0" layoutY="182.0" text="Postal Code:" />
-      <TextField fx:id="postalCodeTextField" layoutX="90.0" layoutY="177.0" prefHeight="25.0" prefWidth="339.0" />
-      <Label layoutX="14.0" layoutY="221.0" text="Province:" />
-      <TextField fx:id="provinceTextField" layoutX="90.0" layoutY="217.0" prefHeight="25.0" prefWidth="170.0" />
-      <Label layoutX="14.0" layoutY="256.0" text="Phone:" />
-      <TextField fx:id="phoneTextField" layoutX="90.0" layoutY="252.0" prefHeight="25.0" prefWidth="170.0" />
-      <Button fx:id="confirmButtonOnAction" layoutX="90.0" layoutY="298.0" mnemonicParsing="false" onAction="#confirmButtonOnAction" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: #ccd936;" text="Confirm">
+      <Label layoutX="54.0" layoutY="121.0" text="ID:" />
+      <Label layoutX="54.0" layoutY="156.0" text="First Name:" />
+      <TextField fx:id="firstNameTextField" layoutX="130.0" layoutY="152.0" prefHeight="25.0" prefWidth="339.0" />
+      <Label layoutX="54.0" layoutY="195.0" text="Last Name:" />
+      <TextField fx:id="lastNameTextField" layoutX="130.0" layoutY="191.0" prefHeight="25.0" prefWidth="339.0" />
+      <Label layoutX="54.0" layoutY="233.0" text="Address:" />
+      <TextField fx:id="addressTextField" layoutX="130.0" layoutY="229.0" prefHeight="25.0" prefWidth="339.0" />
+      <Label layoutX="54.0" layoutY="272.0" text="Postal Code:" />
+      <TextField fx:id="postalCodeTextField" layoutX="130.0" layoutY="267.0" prefHeight="25.0" prefWidth="339.0" />
+      <Label layoutX="54.0" layoutY="311.0" text="Province:" />
+      <TextField fx:id="provinceTextField" layoutX="130.0" layoutY="307.0" prefHeight="25.0" prefWidth="170.0" />
+      <Label layoutX="54.0" layoutY="346.0" text="Phone:" />
+      <TextField fx:id="phoneTextField" layoutX="130.0" layoutY="342.0" prefHeight="25.0" prefWidth="170.0" />
+      <Button fx:id="confirmButtonOnAction" layoutX="130.0" layoutY="388.0" mnemonicParsing="false" onAction="#confirmButtonOnAction" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: #ccd936;" text="Confirm">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button fx:id="cancelButtonOnAction" layoutX="90.0" layoutY="340.0" mnemonicParsing="false" onAction="#cancelButtonOnAction" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: #ED2421;" text="Cancel" textFill="WHITE">
+      <Button fx:id="cancelButtonOnAction" layoutX="130.0" layoutY="430.0" mnemonicParsing="false" onAction="#cancelButtonOnAction" prefHeight="25.0" prefWidth="170.0" style="-fx-background-color: #ED2421;" text="Cancel" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
       <Label fx:id="messageLabel" layoutX="222.0" layoutY="386.0" />
+      <Label layoutX="142.0" layoutY="54.0" text="Please Enter the Values to Update">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="idLabel" layoutX="130.0" layoutY="121.0" />
    </children>
 </AnchorPane>

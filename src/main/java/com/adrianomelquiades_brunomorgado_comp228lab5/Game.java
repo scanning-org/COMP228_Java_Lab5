@@ -5,8 +5,7 @@ public class Game {
     private int game_id;
     private String game_title;
 
-    //Constructor
-
+    //Constructors
     public Game(){}
     public Game(int game_id, String game_title) {
         this.game_id = game_id;
