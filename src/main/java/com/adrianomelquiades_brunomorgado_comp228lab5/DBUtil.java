@@ -116,7 +116,7 @@ public class DBUtil {
         }
 
         if(tExists){
-            System.out.println("Table PLayer Already Created");
+            System.out.println("Table Player Already Created");
         }
         else{
             String sql = "CREATE TABLE player(player_id integer, first_name VARCHAR(50), last_name VARCHAR(50)," +
@@ -154,7 +154,7 @@ public class DBUtil {
         }
 
         if(tExists){
-            System.out.println("Table PLayer_And_Game Already Created");
+            System.out.println("Table Player_And_Game Already Created");
         }
         else{
             String sql = "CREATE TABLE player_and_game(player_game_id integer GENERATED ALWAYS AS(player_id || '' || game_id), game_id integer, player_id integer," +

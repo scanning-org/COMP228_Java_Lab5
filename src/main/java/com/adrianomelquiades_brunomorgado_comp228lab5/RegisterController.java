@@ -110,6 +110,35 @@ import java.util.ResourceBundle;
                     DBUtil.insertDataIntoPlayer(id, firstName, lastName, address, postalCode, province, phone);
                     registrationMessageLabel.setText("User has been registered successfully!");
 
+                    try {
+
+                        //Execute SELECT statement to confirm that the new user has been created. In case positive, perform login
+                        verifyLogin = "SELECT * FROM player WHERE first_name ='" + firstNameTextField.getText() + "' AND last_name ='" + lastNameTextField.getText() + "'"
+                                + " AND player_id ='" + Integer.parseInt(idTextField.getText()) + "'";
+
+                        //Get ResultSet from dbExecuteQuery method
+                        rsPlayer = DBUtil.dbExecuteQuery(verifyLogin);
+
+                        LoginController.player = DBUtil.getPlayerFromResultSet(rsPlayer);
+
+                        if (LoginController.player != null) {
+                            if (firstNameTextField.getText().equals(LoginController.player.getFirst_name())
+                                    && lastNameTextField.getText().equals(LoginController.player.getLast_name()) &&
+                                    Integer.parseInt(idTextField.getText()) == LoginController.player.getId()) {
+
+                                LoginController.createDisplayGames();
+                                System.out.println(LoginController.player.toString());
+
+                            }
+                        } else {
+                            registrationMessageLabel.setText("Please try again.");
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        e.getCause();
+                    }
+
                     Stage stage = (Stage) registerButton.getScene().getWindow();
                     stage.close();
 
@@ -122,35 +151,6 @@ import java.util.ResourceBundle;
                 e.getCause();
             }
 
-
-            try {
-
-                //Execute SELECT statement to confirm that the new user has been created. In case positive, perform login
-                String verifyLogin = "SELECT * FROM player WHERE first_name ='" + firstNameTextField.getText() + "' AND last_name ='" + lastNameTextField.getText() + "'"
-                        + " AND player_id ='" + Integer.parseInt(idTextField.getText()) + "'";
-
-                //Get ResultSet from dbExecuteQuery method
-                ResultSet rsPlayer = DBUtil.dbExecuteQuery(verifyLogin);
-
-                LoginController.player = DBUtil.getPlayerFromResultSet(rsPlayer);
-
-                if (LoginController.player != null) {
-                    if (firstNameTextField.getText().equals(LoginController.player.getFirst_name())
-                            && lastNameTextField.getText().equals(LoginController.player.getLast_name()) &&
-                            Integer.parseInt(idTextField.getText()) == LoginController.player.getId()) {
-
-                        LoginController.createDisplayGames();
-                        System.out.println(LoginController.player.toString());
-
-                    }
-                } else {
-                    registrationMessageLabel.setText("Please try again.");
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                e.getCause();
-            }
 
 
         }
