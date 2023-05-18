@@ -108,7 +108,7 @@
       <property name="tokens"
                value="COMMA, SEMI, TYPECAST, LITERAL_IF, LITERAL_ELSE, LITERAL_RETURN,
                     LITERAL_WHILE, LITERAL_DO, LITERAL_FOR, DO_WHILE, ELLIPSIS,
-                    LITERAL_CATCH, LAMBDA,
+                    LAMBDA,
                     LITERAL_CASE"/>
     </module>
     <module name="WhitespaceAround">
