@@ -28,12 +28,14 @@ jobs:
         
     - name: Install CheckStyle
       run: |
-        wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar
+        wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar || exit1
+      working-directory: /home/runner
         
     - name: Run Checkstyle
       run: |
-        java -jar checkstyle-8.45-all -c /google_checkstyle.xml . > checkstyle-report.txt
-        
+        java -jar /home/runner/checkstyle-8.45-all.jar -c /google_checkstyle.xml . > checkstyle-report.txt
+      working-directory: /home/runner
+      
     - name: Show Checkstyle Report
       run: cat checkstyle-report.txt
 
