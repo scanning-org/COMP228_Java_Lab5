@@ -1,18 +1,40 @@
-name: Java Checkstyle
+name: Java CI with CheckStyle
 on:
-  pull_request:
-    types:
-      - opened
-      - edited
-  workflow_dispatch:
   push:
+    branches: [develop, uat, main, master]
+  pull_request:
+    branches: [develop, uat, main, master]
+  workflow_dispatch:
+
 jobs:
-  checkstyle:
+  build:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Output event data
-        run: echo "${{toJSON(github.event)}}"
-      - name: Get code
-        uses: actions/checkout@v3
-      - name: Run java checkstyle
-        uses: nikitasavinov/checkstyle-action@0.6.0
+    - uses: actions/checkout@v2
+    
+    - name: Set Up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        java-version: '11'
+        distribution: 'adopt'
+        
+    - name: Cache .m2 repository
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-m2-{{ hasFiles('**pom.xml') }}
+        restore-keys: ${{ runner.os }}-m2
+        
+    - name: Install CheckStyle
+      run: |
+        wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar
+        
+    - name: Run Checkstyle
+      run: |
+        java -jar checkstyle-8.45-all -c /google_checkstyle.xml . > checkstyle-report.txt
+        
+    - name: Show Checkstyle Report
+      run: cat checkstyle-report.txt
+
+
