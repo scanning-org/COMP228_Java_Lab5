@@ -35,12 +35,12 @@ jobs:
       run: ls /home/runner
       
     - name: List root files
-      run: ls /
+      run: ls ${{ github.workspace }}
         
     - name: Run Checkstyle
       run: |
         java -jar /home/runner/checkstyle-8.45-all.jar -c ./google_checks.xml . > checkstyle-report.txt || exit
-      working-directory: /home/runner
+      working-directory: ${{ github.workspace }}
       
     - name: Show Checkstyle Report
       run: cat checkstyle-report.txt
