@@ -30,6 +30,12 @@ jobs:
       run: |
         wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar || exit1
       working-directory: /home/runner
+    
+    - name: List files
+      run: ls /home/runner
+      
+    - name: List root files
+      run: ls /
         
     - name: Run Checkstyle
       run: |
