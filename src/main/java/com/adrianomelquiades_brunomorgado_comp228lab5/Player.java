@@ -1,7 +1,8 @@
 package com.adrianomelquiades_brunomorgado_comp228lab5;
 
-import javafx.beans.property.*;
 import java.sql.Date;
+import javafx.beans.property.*;
+
 
 public class Player {
 
