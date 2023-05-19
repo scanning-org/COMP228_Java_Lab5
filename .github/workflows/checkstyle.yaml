@@ -50,7 +50,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: report-file
-        path: ${{ github.workspace }}/checkstyle-report.txt
+        path: checkstyle-report.txt
           
     - name: Show Checkstyle Report
       run: cat checkstyle-report.txt
