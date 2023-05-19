@@ -44,7 +44,7 @@ jobs:
       
     - name: Display structure of downloaded files
       run: ls
-      working-directory: /home/runner
+      working-directory: ${{ github.workspace }}
     
     - name: Download report
       uses: actions/download-artifact@v3
