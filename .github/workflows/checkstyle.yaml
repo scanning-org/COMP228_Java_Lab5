@@ -50,7 +50,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: report-file
-        path: /home/runner/checkstyle-report.txt
+        path: ${{ gitgub.workspace }}/checkstyle-report.txt
           
     - name: Show Checkstyle Report
       run: cat checkstyle-report.txt
