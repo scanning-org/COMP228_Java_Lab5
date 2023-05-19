@@ -43,7 +43,7 @@ jobs:
       working-directory: ${{ github.workspace }}
       
     - name: Display structure of downloaded files
-      run: ls
+      run: pwd
       working-directory: ${{ github.workspace }}
     
     - name: Download report
