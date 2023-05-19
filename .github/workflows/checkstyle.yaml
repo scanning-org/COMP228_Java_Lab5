@@ -46,7 +46,8 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: report-file
-        path: ./checkstyle-report.txt
+        path: checkstyle-report.txt
+        
     - name: Display structure of downloaded files
       run: ls -R
       working-directory: ${{ github.workspace }}
