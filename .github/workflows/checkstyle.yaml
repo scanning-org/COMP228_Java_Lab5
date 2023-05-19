@@ -41,7 +41,16 @@ jobs:
       run: |
         java -jar /home/runner/checkstyle-8.45-all.jar -c ./google_checks.xml . > checkstyle-report.txt || exit
       working-directory: ${{ github.workspace }}
-      
+    
+    - name: Download report
+      uses: actions/download-artifact@v3
+      with:
+        name: report-file
+        path: ./checkstyle-report.txt
+    - name: Display structure of downloaded files
+      run: ls -R
+      working-directory: ${{ github.workspace }}
+          
     - name: Show Checkstyle Report
       run: cat checkstyle-report.txt
 
