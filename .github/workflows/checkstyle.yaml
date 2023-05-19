@@ -47,10 +47,10 @@ jobs:
       working-directory: ${{ github.workspace }}
      
     - name: Download report
-      uses: actions/download-artifact@v3
+      uses: actions/upload-artifact@v3
       with:
-        name: report-file
-        path: checkstyle-report
+        name: checkstyle-report
+        path: checkstyle-report.txt
      
     - name: Show Checkstyle Report
       run: cat checkstyle-report.txt
