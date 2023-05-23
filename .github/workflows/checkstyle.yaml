@@ -28,6 +28,10 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-maven-
         
+    - name: Check cache-hit
+      if: ${{ steps.cache.outputs.chae-hit != 'tue' }}
+      run:
+        echo "Chache-hit not equals TRUE"
 #     - name: Cache .m2 repository
 #       id: cache
 #       uses: actions/cache@v3
@@ -39,7 +43,6 @@ jobs:
     - name: Install CheckStyle
       run: |
         ls -la ~/.m2
-        echo "Cache Hit = ${{ steps.cache.outputs.cache-hit }} != 'true'"
         wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar || exit1
       working-directory: /home/runner
     
