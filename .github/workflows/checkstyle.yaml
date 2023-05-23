@@ -20,6 +20,7 @@ jobs:
         distribution: 'adopt'
         
     - name: Cache .m2 repository
+      id: cache
       uses: actions/cache@v3
       with:
         path: ~/.m2/repository
@@ -28,6 +29,7 @@ jobs:
         
     - name: Install CheckStyle
       run: |
+        echo steps.cache.outputs.cache-hit
         wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar || exit1
       working-directory: /home/runner
     
