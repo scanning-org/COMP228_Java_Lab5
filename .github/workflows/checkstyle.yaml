@@ -29,7 +29,8 @@ jobs:
         
     - name: Install CheckStyle
       run: |
-        echo "Cache Hit = {{ steps.cache.outputs.cache-hit }}"
+        ls -la
+        echo "Cache Hit = ${{ steps.cache.outputs.cache-hit }}"
         wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar || exit1
       working-directory: /home/runner
     
