@@ -21,6 +21,7 @@ jobs:
         
     - name: Cache local Maven repository
       uses: actions/cache@v3
+      id: cache
       with:
         path: ~/.m2/repository
         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
@@ -38,7 +39,7 @@ jobs:
     - name: Install CheckStyle
       run: |
         ls -la ~/.m2
-        echo "Cache Hit = ${{ steps.cache.outputs.cache-hit }}"
+        echo "Cache Hit = ${{ steps.cache.outputs.cache-hit }} != 'true'"
         wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar || exit1
       working-directory: /home/runner
     
