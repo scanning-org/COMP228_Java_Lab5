@@ -24,7 +24,7 @@ jobs:
       uses: actions/cache@v3
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-m2-{{ hasFiles('**.xml') }}
+        key: ${{ runner.os }}-m2-{{ hasFiles('**/pom.xml') }}
         restore-keys: ${{ runner.os }}-m2
         
     - name: Install CheckStyle
