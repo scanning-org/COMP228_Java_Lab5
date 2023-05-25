@@ -43,7 +43,7 @@ jobs:
     - name: Install CheckStyle
       run: |
         ls -la ~/.m2
-        wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar || exit1
+        wget https://github.com/checkstyle/checkstyle/releases/download/checkstyle-8.45/checkstyle-8.45-all.jar || exit 1
       working-directory: /home/runner
     
     - name: List files
@@ -54,7 +54,7 @@ jobs:
         
     - name: Run Checkstyle
       run: |
-        java -jar /home/runner/checkstyle-8.45-all.jar -c ./google_checks.xml . > checkstyle-report.txt || exit
+        java -jar /home/runner/checkstyle-8.45-all.jar -c ./google_checks.xml . > checkstyle-report.txt || exit 1
       working-directory: ${{ github.workspace }}
       
     - name: Display structure of downloaded files
